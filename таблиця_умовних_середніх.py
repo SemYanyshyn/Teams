@@ -97,3 +97,10 @@ print(df[["x_i", "n_i", "y_xi", "y_i*"]].to_string(index=False, formatters={
     "y_xi": "{:.4f}".format,
     "y_i*": "{:.4f}".format
 }))
+
+y_general_mean = sum_ny / sum_n
+
+print("\nЗагальне середнє значення Y:")
+print("ȳ = Σ n_i ȳ_xi / Σ n_i")
+print(f"ȳ = {sum_ny:.1f} / {sum_n}")
+print(f"ȳ = {y_general_mean:.4f}")

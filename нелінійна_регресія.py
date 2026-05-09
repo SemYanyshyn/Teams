@@ -148,3 +148,23 @@ eta_squared = eta ** 2
 
 print(f"\nη² = {eta:.4f}² = {eta_squared:.4f}")
 
+# Порівняння з коефіцієнтом кореляції Пірсона
+r = 0.8973
+
+r_squared = r ** 2
+
+difference = eta_squared - r_squared
+
+print(f"\nr = {r:.4f}")
+print(f"r² = {r:.4f}² = {r_squared:.4f}")
+
+print(f"\nη² - r² = {eta_squared:.4f} - {r_squared:.4f} = {difference:.4f}")
+
+if difference > 0.1:
+    print("\nВисновок:")
+    print("Оскільки η² - r² > 0.1, лінійна модель недостатньо описує дані.")
+    print("Тому доцільно будувати нелінійну регресію.")
+else:
+    print("\nВисновок:")
+    print("Оскільки η² - r² <= 0.1, лінійна модель достатньо добре описує дані.")
+

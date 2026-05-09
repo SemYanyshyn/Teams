@@ -1,3 +1,5 @@
+import math
+
 # Значення Y
 y_values = [1.5, 2.5, 3, 3.5, 4, 4.5]
 
@@ -133,4 +135,16 @@ print(f"n = {n}")
 print(f"ȳ = {y_mean:.4f}")
 print(f"Qp_emp = {Qp_emp:.4f}")
 print(f"D_p = Qp_emp / n = {Qp_emp:.4f} / {n} = {D_p:.4f}")
+
+# Обчислення кореляційного відношення η
+eta = math.sqrt(D_p / D_total)
+
+print(f"\nη = sqrt(D_p / D_total)")
+print(f"η = sqrt({D_p:.4f} / {D_total:.4f})")
+print(f"η = sqrt({D_p / D_total:.4f})")
+print(f"η = {eta:.4f}")
+
+eta_squared = eta ** 2
+
+print(f"\nη² = {eta:.4f}² = {eta_squared:.4f}")
 

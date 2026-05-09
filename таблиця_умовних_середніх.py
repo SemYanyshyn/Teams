@@ -167,3 +167,53 @@ print(
     f"але не є ідеальною, оскільки приблизно {unexplained_percent:.2f}% "
     f"варіації залишається непоясненою."
 )
+
+# Вибіркові середні значення X та Y
+x_mean = sum_xn / sum_n
+y_mean_general = sum_ny / sum_n
+
+print("\nВибіркове середнє для X:")
+print("x̄ = Σ x_i n_i / n")
+print(f"x̄ = {sum_xn} / {sum_n}")
+print(f"x̄ = {x_mean:.4f}")
+
+print("\nСереднє для Y вже було знайдено:")
+print("ȳ = Σ n_i ȳ_xi / n")
+print(f"ȳ = {sum_ny:.1f} / {sum_n}")
+print(f"ȳ = {y_mean_general:.4f}")
+
+m_j_values = [sum(row) for row in freq]
+
+numerator_r = 0
+
+for i, y in enumerate(y_values):
+    for j, x in enumerate(x_values):
+        n_ij = freq[i][j]
+        numerator_r += n_ij * (x - x_mean) * (y - y_mean)
+
+sum_x_part = sum(
+    df.loc[i, "n_i"] * (df.loc[i, "x_i"] - x_mean) ** 2
+    for i in range(len(df))
+)
+
+sum_y_part = sum(
+    m_j_values[i] * (y_values[i] - y_mean) ** 2
+    for i in range(len(y_values))
+)
+
+denominator_r = (sum_x_part * sum_y_part) ** 0.5
+
+r = numerator_r / denominator_r
+
+print("\nВибірковий лінійний коефіцієнт кореляції:")
+print(f"x̄ = {x_mean:.4f}")
+print(f"ȳ = {y_mean:.4f}")
+print(f"ΣΣ n_ij(x_i - x̄)(y_j - ȳ) = {numerator_r:.4f}")
+print(f"Σ n_i(x_i - x̄)² = {sum_x_part:.4f}")
+print(f"Σ m_j(y_j - ȳ)² = {sum_y_part:.4f}")
+print(f"√(Σ n_i(x_i - x̄)² · Σ m_j(y_j - ȳ)²) = {denominator_r:.4f}")
+print(f"r = {numerator_r:.4f} / {denominator_r:.4f}")
+print(f"r = {r:.4f}")
+
+print("\nВисновок:")
+print(f"Оскільки r = {r:.4f}, між X та Y існує сильний додатний лінійний зв'язок.")

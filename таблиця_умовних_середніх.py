@@ -104,3 +104,44 @@ print("\nЗагальне середнє значення Y:")
 print("ȳ = Σ n_i ȳ_xi / Σ n_i")
 print(f"ȳ = {sum_ny:.1f} / {sum_n}")
 print(f"ȳ = {y_general_mean:.4f}")
+
+# Загальне середнє значення Y
+y_general_mean = sum_ny / sum_n
+
+print("\nЗагальне середнє значення Y:")
+print("ȳ = Σ n_i ȳ_xi / Σ n_i")
+print(f"ȳ = {sum_ny:.1f} / {sum_n}")
+print(f"ȳ = {y_general_mean:.4f}")
+
+# Обчислення варіацій
+df["Q_total"] = df["n_i"] * (df["y_xi"] - y_general_mean) ** 2
+df["Q_p"] = df["n_i"] * (df["y_i*"] - y_general_mean) ** 2
+df["Q_o"] = df["n_i"] * (df["y_xi"] - df["y_i*"]) ** 2
+
+print("\nТаблиця обчислення варіацій:")
+print(df[["x_i", "n_i", "Q_total", "Q_p", "Q_o"]].to_string(index=False, formatters={
+    "Q_total": "{:.4f}".format,
+    "Q_p": "{:.4f}".format,
+    "Q_o": "{:.4f}".format
+}))
+
+# Підсумки варіацій
+Q_total = df["Q_total"].sum()
+Q_p = df["Q_p"].sum()
+Q_o = df["Q_o"].sum()
+
+print("\nПідсумовуємо:")
+print(f"Q_total = {Q_total:.4f}")
+print(f"Q_p = {Q_p:.4f}")
+print(f"Q_o = {Q_o:.4f}")
+
+# Перевірка основного варіаційного рівняння
+print("\nПеревірка основного варіаційного рівняння:")
+print("Q_total = Q_p + Q_o")
+print(f"{Q_total:.4f} = {Q_p:.4f} + {Q_o:.4f}")
+print(f"{Q_total:.4f} = {Q_p + Q_o:.4f}")
+
+if round(Q_total, 4) == round(Q_p + Q_o, 4):
+    print("Висновок: основне варіаційне рівняння виконується.")
+else:
+    print("Висновок: основне варіаційне рівняння не виконується через округлення або помилку в обчисленнях.")

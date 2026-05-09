@@ -35,3 +35,94 @@ y_mean = y_sum / n
 print("y_j * m_j =", y_products)
 print("Σ y_j * m_j =", y_sum)
 print(f"ȳ = {y_sum} / {n} = {y_mean:.4f}")
+
+import math
+
+# Кореляційна таблиця частот n_ij
+# Рядки відповідають y_j, стовпці відповідають x_i
+freq = [
+    [21, 0, 0, 0, 0, 0, 0],
+    [4, 31, 3, 0, 0, 0, 0],
+    [0, 5, 28, 3, 4, 0, 0],
+    [0, 0, 0, 25, 4, 3, 0],
+    [0, 0, 0, 0, 17, 3, 5],
+    [0, 0, 0, 0, 0, 29, 2]
+]
+
+print("\nОбчислення вибіркового лінійного коефіцієнта кореляції r:")
+
+numerator = 0
+
+for j in range(len(y_values)):
+    for i in range(len(x_values)):
+        numerator += freq[j][i] * (x_values[i] - x_mean) * (y_values[j] - y_mean)
+
+sum_x = sum(n_i[i] * (x_values[i] - x_mean) ** 2 for i in range(len(x_values)))
+sum_y = sum(m_j[j] * (y_values[j] - y_mean) ** 2 for j in range(len(y_values)))
+
+denominator = math.sqrt(sum_x * sum_y)
+r = numerator / denominator
+
+print(f"ΣΣ n_ij(x_i - x̄)(y_j - ȳ) = {numerator:.4f}")
+print(f"Σ n_i(x_i - x̄)^2 = {sum_x:.4f}")
+print(f"Σ m_j(y_j - ȳ)^2 = {sum_y:.4f}")
+
+print("\nПідстановка у формулу:")
+print(f"r = {numerator:.4f} / sqrt({sum_x:.4f} * {sum_y:.4f})")
+print(f"r = {numerator:.4f} / {denominator:.4f}")
+print(f"r = {r:.4f}")
+
+print("\nІнтерпретація:")
+
+if r > 0:
+    print("Оскільки r > 0, зв’язок між X та Y є додатний.")
+elif r < 0:
+    print("Оскільки r < 0, зв’язок між X та Y є від’ємний.")
+else:
+    print("Оскільки r = 0, лінійний зв’язок між X та Y відсутній.")
+
+if abs(r) >= 0.7:
+    print(f"Оскільки |r| = {abs(r):.4f}, зв’язок є сильним.")
+elif abs(r) >= 0.3:
+    print(f"Оскільки |r| = {abs(r):.4f}, зв’язок є помірним.")
+else:
+    print(f"Оскільки |r| = {abs(r):.4f}, зв’язок є слабким.")
+
+
+print("\nПеревірка значущості коефіцієнта кореляції за t-критерієм Стьюдента:")
+
+t_emp = r * math.sqrt(n - 2) / math.sqrt(1 - r ** 2)
+
+df = n - 2
+alpha = 0.05
+t_crit = 1.973  # для alpha = 0.05 і df = 185
+
+print("Формула:")
+print("t_емп = r * sqrt(n - 2) / sqrt(1 - r^2)")
+
+print("\nПідстановка:")
+print(f"t_емп = {r:.4f} * sqrt({n} - 2) / sqrt(1 - {r:.4f}^2)")
+print(f"t_емп = {r:.4f} * sqrt({n - 2}) / sqrt(1 - {r ** 2:.4f})")
+print(f"t_емп = {r:.4f} * {math.sqrt(n - 2):.4f} / sqrt({1 - r ** 2:.4f})")
+print(f"t_емп = {r * math.sqrt(n - 2):.4f} / {math.sqrt(1 - r ** 2):.4f}")
+
+print("\nРезультат:")
+print(f"t_емп = {t_emp:.4f}")
+
+print("\nКритичні значення:")
+print(f"α = {alpha}")
+print(f"df = n - 2 = {n} - 2 = {df}")
+print(f"t_кр = {t_crit}")
+
+print("\nПорівняння:")
+
+if abs(t_emp) > t_crit:
+    print(f"|t_емп| > t_кр")
+    print(f"{abs(t_emp):.4f} > {t_crit}")
+    print("Отже, H0 відхиляємо.")
+    print("Коефіцієнт кореляції є статистично значущим.")
+else:
+    print(f"|t_емп| ≤ t_кр")
+    print(f"{abs(t_emp):.4f} ≤ {t_crit}")
+    print("Отже, H0 не відхиляємо.")
+    print("Статистично значущого лінійного зв’язку не підтверджено.")

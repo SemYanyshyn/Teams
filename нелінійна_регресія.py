@@ -168,3 +168,114 @@ else:
     print("\nВисновок:")
     print("Оскільки η² - r² <= 0.1, лінійна модель достатньо добре описує дані.")
 
+# ----------------------------------------
+# Блок: підготовка сум для параболічної моделі
+# ----------------------------------------
+
+# Значення X (впорядковані без дублікатів)
+x_values = [3, 5, 6, 9, 12, 14, 19]
+
+# Частоти та умовні середні (перераховуються відповідно до x_values)
+n_i = []
+y_x_mean = []
+
+for i, x in enumerate(x_values):
+    n_val = sum(freq[j][i] for j in range(len(y_values)))
+    numerator = sum(freq[j][i] * y_values[j] for j in range(len(y_values)))
+    y_mean_x = numerator / n_val if n_val != 0 else 0.0
+
+    n_i.append(n_val)
+    y_x_mean.append(y_mean_x)
+
+sum_n = sum(n_i)
+sum_nx = sum(n_i[i] * x_values[i] for i in range(len(x_values)))
+sum_nx2 = sum(n_i[i] * x_values[i]**2 for i in range(len(x_values)))
+sum_nx3 = sum(n_i[i] * x_values[i]**3 for i in range(len(x_values)))
+sum_nx4 = sum(n_i[i] * x_values[i]**4 for i in range(len(x_values)))
+
+sum_ny = sum(n_i[i] * y_x_mean[i] for i in range(len(x_values)))
+sum_nxy = sum(n_i[i] * x_values[i] * y_x_mean[i] for i in range(len(x_values)))
+sum_nx2y = sum(n_i[i] * x_values[i]**2 * y_x_mean[i] for i in range(len(x_values)))
+
+print("\nПотрібні суми для параболічної моделі:")
+print(f"Σ n_i = {sum_n}")
+print(f"Σ n_i x_i = {sum_nx}")
+print(f"Σ n_i x_i² = {sum_nx2}")
+print(f"Σ n_i x_i³ = {sum_nx3}")
+print(f"Σ n_i x_i⁴ = {sum_nx4}")
+print(f"Σ n_i ȳ_xi = {sum_ny}")
+print(f"Σ n_i x_i ȳ_xi = {sum_nxy}")
+print(f"Σ n_i x_i² ȳ_xi = {sum_nx2y}")
+
+import numpy as np
+import pandas as pd
+
+# Дані
+x_values = [3, 5, 6, 9, 12, 14, 19]
+n_i = [25, 36, 31, 28, 25, 35, 7]
+y_x_mean = [1.6600, 2.5694, 2.9516, 3.4464, 3.7600, 4.3714, 4.1429]
+
+# Матриця системи для параболічної моделі
+A = np.array([
+    [3023616, 219536, 17496],
+    [219536, 17496, 1616],
+    [17496, 1616, 187]
+], dtype=float)
+
+B = np.array([67789.5, 5825.5, 598], dtype=float)
+
+# Розв'язання системи
+a, b, c = np.linalg.solve(A, B)
+
+print("Система нормальних рівнянь:")
+print("3023616a + 219536b + 17496c = 67789.5")
+print("219536a + 17496b + 1616c = 5825.5")
+print("17496a + 1616b + 187c = 598")
+
+print("\nРозв'язок системи:")
+print(f"a = {a:.4f}")
+print(f"b = {b:.4f}")
+print(f"c = {c:.4f}")
+
+print("\nРівняння параболічної регресії:")
+print(f"y* = {a:.4f}x² + {b:.4f}x + {c:.4f}")
+
+# Обчислення таблиці
+rows = []
+Q_o = 0
+
+for x, n, y_emp in zip(x_values, n_i, y_x_mean):
+    y_star = a * x**2 + b * x + c
+    diff = y_emp - y_star
+    weighted_square = n * diff**2
+    Q_o += weighted_square
+
+    rows.append({
+        "x_i": x,
+        "n_i": n,
+        "ȳ_xi": y_emp,
+        "y_i*": y_star,
+        "ȳ_xi - y_i*": diff,
+        "n_i(ȳ_xi - y_i*)²": weighted_square
+    })
+
+df = pd.DataFrame(rows)
+
+# Округлення для гарного виводу
+df_display = df.copy()
+df_display["ȳ_xi"] = df_display["ȳ_xi"].map(lambda x: f"{x:.4f}")
+df_display["y_i*"] = df_display["y_i*"].map(lambda x: f"{x:.4f}")
+df_display["ȳ_xi - y_i*"] = df_display["ȳ_xi - y_i*"].map(lambda x: f"{x:.4f}")
+df_display["n_i(ȳ_xi - y_i*)²"] = df_display["n_i(ȳ_xi - y_i*)²"].map(lambda x: f"{x:.4f}")
+
+print("\nТаблиця для обчислення залишкової варіації Q_o:")
+print(
+    f"{'x_i':>4}  {'n_i':>4}  {'ȳ_xi':>8}  {'y_i*':>8}  {'ȳ_xi - y_i*':>12}  {'n_i(ȳ_xi - y_i*)²':>18}"
+)
+for row in df_display.itertuples(index=False):
+    print(
+        f"{row[0]:>4}  {row[1]:>4}  {row[2]:>8}  {row[3]:>8}  {row[4]:>12}  {row[5]:>18}"
+    )
+
+print("\nЗалишкова варіація параболічної моделі:")
+print(f"Q_o = Σ n_i(ȳ_xi - y_i*)² = {Q_o:.4f}")

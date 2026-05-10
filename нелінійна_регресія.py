@@ -390,3 +390,65 @@ print(f"R² = 1 - Q_o / Q_total_emp")
 print(f"R² = 1 - {Q_o:.4f} / {Q_total_emp:.4f}")
 print(f"R² = {R_squared:.4f}")
 
+# Дані для оптимальної параболічної моделі
+Q_o = 4.3735
+Q_total_emp = 139.3071
+n = 187
+m = 3
+alpha = 0.05
+
+# Обчислення Qp
+Q_p = Q_total_emp - Q_o
+
+# Обчислення Fемп
+F_emp = (Q_p * (n - m)) / (Q_o * (m - 1))
+
+# Ступені свободи
+k1 = m - 1
+k2 = n - m
+
+# Критичне значення F для alpha=0.05, k1=2, k2=184 з таблиці F-розподілу
+F_crit = 3.05
+
+print("\nПеревірка адекватності параболічної моделі за F-критерієм Фішера")
+print()
+
+print("Початкові дані:")
+print(f"Q_o = {Q_o:.4f}")
+print(f"Q_total_emp = {Q_total_emp:.4f}")
+print(f"n = {n}")
+print(f"m = {m}")
+print(f"alpha = {alpha}")
+
+print("\nОбчислення Q_p:")
+print("Q_p = Q_total_emp - Q_o")
+print(f"Q_p = {Q_total_emp:.4f} - {Q_o:.4f} = {Q_p:.4f}")
+
+print("\nОбчислення F_емп:")
+print("F_емп = Q_p(n - m) / (Q_o(m - 1))")
+print(f"F_емп = {Q_p:.4f}({n} - {m}) / ({Q_o:.4f}({m} - 1))")
+print(f"F_емп = {Q_p:.4f} * {n - m} / ({Q_o:.4f} * {m - 1})")
+print(f"F_емп = {F_emp:.2f}")
+
+print("\nСтупені свободи:")
+print(f"k1 = m - 1 = {m} - 1 = {k1}")
+print(f"k2 = n - m = {n} - {m} = {k2}")
+
+print("\nКритичне значення:")
+print(f"F_кр({alpha}; {k1}; {k2}) = {F_crit:.2f}")
+
+print("\nПорівняння:")
+print(f"F_емп = {F_emp:.2f}")
+print(f"F_кр = {F_crit:.2f}")
+
+if F_emp > F_crit:
+    print("\nВисновок:")
+    print(f"Оскільки F_емп = {F_emp:.2f} > F_кр = {F_crit:.2f},")
+    print("нульову гіпотезу відхиляємо.")
+    print("Параболічна модель є статистично значущою та адекватною.")
+else:
+    print("\nВисновок:")
+    print(f"Оскільки F_емп = {F_emp:.2f} <= F_кр = {F_crit:.2f},")
+    print("нульову гіпотезу не відхиляємо.")
+    print("Параболічна модель не є статистично значущою.")
+

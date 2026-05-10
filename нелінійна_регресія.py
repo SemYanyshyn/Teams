@@ -279,3 +279,114 @@ for row in df_display.itertuples(index=False):
 
 print("\nЗалишкова варіація параболічної моделі:")
 print(f"Q_o = Σ n_i(ȳ_xi - y_i*)² = {Q_o:.4f}")
+
+# ----------------------------------------
+# Блок: гіперболічна модель регресії
+# ----------------------------------------
+
+import numpy as np
+
+# Дані
+x_values = [3, 5, 6, 9, 12, 14, 19]
+n_i = [25, 36, 31, 28, 25, 35, 7]
+y_x_mean = [1.6600, 2.5694, 2.9516, 3.4464, 3.7600, 4.3714, 4.1429]
+
+# Обчислення потрібних сум
+sum_n_div_x2 = sum(n / x**2 for x, n in zip(x_values, n_i))
+sum_n_div_x = sum(n / x for x, n in zip(x_values, n_i))
+sum_n = sum(n_i)
+sum_ny_div_x = sum(n * y / x for x, n, y in zip(x_values, n_i, y_x_mean))
+sum_ny = sum(n * y for n, y in zip(n_i, y_x_mean))
+
+print("\nПотрібні суми для гіперболічної моделі:")
+print(f"Σ n_i / x_i² = {sum_n_div_x2:.4f}")
+print(f"Σ n_i / x_i = {sum_n_div_x:.4f}")
+print(f"Σ n_i = {sum_n}")
+print(f"Σ n_i ȳ_xi / x_i = {sum_ny_div_x:.4f}")
+print(f"Σ n_i ȳ_xi = {sum_ny:.4f}")
+
+# Система нормальних рівнянь
+A = np.array([
+    [sum_n_div_x2, sum_n_div_x],
+    [sum_n_div_x, sum_n],
+], dtype=float)
+
+B = np.array([
+    sum_ny_div_x,
+    sum_ny,
+], dtype=float)
+
+# Розв'язання системи
+a, b = np.linalg.solve(A, B)
+
+print("\nСистема нормальних рівнянь:")
+print(f"{sum_n_div_x2:.4f}a + {sum_n_div_x:.4f}b = {sum_ny_div_x:.4f}")
+print(f"{sum_n_div_x:.4f}a + {sum_n}b = {sum_ny:.4f}")
+
+print("\nРозв'язок системи:")
+print(f"a = {a:.4f}")
+print(f"b = {b:.4f}")
+
+print("\nРівняння гіперболічної регресії:")
+print(f"y* = {a:.4f} / x + {b:.4f}")
+
+# ----------------------------------------
+# Блок: таблиця залишків та R² для гіперболічної моделі
+# ----------------------------------------
+
+# Дані
+x_values = [3, 5, 6, 9, 12, 14, 19]
+n_i = [25, 36, 31, 28, 25, 35, 7]
+y_x_mean = [1.6600, 2.5694, 2.9516, 3.4464, 3.7600, 4.3714, 4.1429]
+
+# Параметри гіперболічної моделі
+a = -9.7560
+b = 4.6984
+
+# Емпірична варіація
+Q_total_emp = 139.3071
+
+rows = []
+Q_o = 0
+
+for x, n, y_emp in zip(x_values, n_i, y_x_mean):
+    y_star = a / x + b
+    diff = y_emp - y_star
+    weighted_square = n * diff ** 2
+    Q_o += weighted_square
+
+    rows.append({
+        "x_i": x,
+        "n_i": n,
+        "ȳ_xi": y_emp,
+        "y_i*": y_star,
+        "ȳ_xi - y_i*": diff,
+        "n_i(ȳ_xi - y_i*)²": weighted_square
+    })
+
+df = pd.DataFrame(rows)
+
+# Гарний вивід таблиці
+df_display = df.copy()
+df_display["ȳ_xi"] = df_display["ȳ_xi"].map(lambda x: f"{x:.4f}")
+df_display["y_i*"] = df_display["y_i*"].map(lambda x: f"{x:.4f}")
+df_display["ȳ_xi - y_i*"] = df_display["ȳ_xi - y_i*"].map(lambda x: f"{x:.4f}")
+df_display["n_i(ȳ_xi - y_i*)²"] = df_display["n_i(ȳ_xi - y_i*)²"].map(lambda x: f"{x:.4f}")
+
+# R²
+R_squared = 1 - Q_o / Q_total_emp
+
+print("\nГіперболічна модель:")
+print(f"y* = {a:.4f} / x + {b:.4f}")
+
+print("\nТаблиця для обчислення залишкової варіації Q_o:")
+print(df_display.to_string(index=False))
+
+print("\nОбчислення Q_o:")
+print(f"Q_o = Σ n_i(ȳ_xi - y_i*)² = {Q_o:.4f}")
+
+print("\nОбчислення R²:")
+print(f"R² = 1 - Q_o / Q_total_emp")
+print(f"R² = 1 - {Q_o:.4f} / {Q_total_emp:.4f}")
+print(f"R² = {R_squared:.4f}")
+

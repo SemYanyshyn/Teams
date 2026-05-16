@@ -49,7 +49,7 @@ ax.scatter(
     x_values,
     y_x_mean,
     s=250,
-    label="Поле кореляції",
+    label="Умовні середні ȳ_xi",
     color=color_scatter,
     alpha=0.8,
     edgecolors="darkred",

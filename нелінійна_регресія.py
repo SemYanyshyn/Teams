@@ -116,7 +116,6 @@ if difference > 0.1:
 else:
     print("\nВисновок:")
     print("Оскільки η² - r² <= 0.1, лінійна модель достатньо добре описує дані.")
-    print("Але нижче все одно побудовано нелінійні моделі для повного аналізу.")
 
 print("\n" + "=" * 70)
 print("ПАРАБОЛІЧНА МОДЕЛЬ")
@@ -203,26 +202,25 @@ print(f"R² = {R2_par:.4f}")
 
 print("\nПеревірка адекватності параболічної моделі за F-критерієм Фішера:")
 
-m = 3
-alpha = 0.05
+m_par = 3
 Q_p_par = Qp_emp - Q_o_par
-F_emp_par = (Q_p_par * (n - m)) / (Q_o_par * (m - 1))
-k1 = m - 1
-k2 = n - m
-F_crit = 3.04
+F_emp_par = (Q_p_par * (n - m_par)) / (Q_o_par * (m_par - 1))
+k1_par = m_par - 1
+k2_par = n - m_par
+F_crit_par = 3.04
 
 print(f"Q_o = {Q_o_par:.4f}")
 print(f"Q_total_emp = {Qp_emp:.4f}")
 print(f"Q_p = Q_total_emp - Q_o = {Qp_emp:.4f} - {Q_o_par:.4f} = {Q_p_par:.4f}")
 print("F_емп = Q_p(n - m) / (Q_o(m - 1))")
-print(f"F_емп = {Q_p_par:.4f} * ({n} - {m}) / ({Q_o_par:.4f} * ({m} - 1))")
+print(f"F_емп = {Q_p_par:.4f} * ({n} - {m_par}) / ({Q_o_par:.4f} * ({m_par} - 1))")
 print(f"F_емп = {F_emp_par:.4f}")
-print(f"k1 = {k1}")
-print(f"k2 = {k2}")
-print(f"F_кр = {F_crit:.2f}")
+print(f"k1 = m - 1 = {m_par} - 1 = {k1_par}")
+print(f"k2 = n - m = {n} - {m_par} = {k2_par}")
+print(f"F_кр = {F_crit_par:.2f}")
 
-if F_emp_par > F_crit:
-    print("Оскільки F_емп > F_кр, параболічна модель є статистично значущою.")
+if F_emp_par > F_crit_par:
+    print("Оскільки F_емп > F_кр, параболічна модель є статистично значущою та адекватною.")
 else:
     print("Оскільки F_емп <= F_кр, параболічна модель не є статистично значущою.")
 
@@ -300,6 +298,30 @@ print(f"Q_o = Σ n_i(ȳ_xi - y_i*)² = {Q_o_root:.4f}")
 print("R² = 1 - Q_o / Q_total_emp")
 print(f"R² = 1 - {Q_o_root:.4f} / {Qp_emp:.4f}")
 print(f"R² = {R2_root:.4f}")
+
+print("\nПеревірка адекватності кореневої моделі за F-критерієм Фішера:")
+
+m_root = 2
+Q_p_root = Qp_emp - Q_o_root
+F_emp_root = (Q_p_root * (n - m_root)) / (Q_o_root * (m_root - 1))
+k1_root = m_root - 1
+k2_root = n - m_root
+F_crit_root = 3.89
+
+print(f"Q_o = {Q_o_root:.4f}")
+print(f"Q_total_emp = {Qp_emp:.4f}")
+print(f"Q_p = Q_total_emp - Q_o = {Qp_emp:.4f} - {Q_o_root:.4f} = {Q_p_root:.4f}")
+print("F_емп = Q_p(n - m) / (Q_o(m - 1))")
+print(f"F_емп = {Q_p_root:.4f} * ({n} - {m_root}) / ({Q_o_root:.4f} * ({m_root} - 1))")
+print(f"F_емп = {F_emp_root:.4f}")
+print(f"k1 = m - 1 = {m_root} - 1 = {k1_root}")
+print(f"k2 = n - m = {n} - {m_root} = {k2_root}")
+print(f"F_кр = {F_crit_root:.2f}")
+
+if F_emp_root > F_crit_root:
+    print("Оскільки F_емп > F_кр, коренева модель є статистично значущою та адекватною.")
+else:
+    print("Оскільки F_емп <= F_кр, коренева модель не є статистично значущою.")
 
 print("\nПорівняння моделей:")
 print(f"Параболічна модель: Q_o = {Q_o_par:.4f}, R² = {R2_par:.4f}")

@@ -43,7 +43,7 @@ sum_x2n = df["x_i^2 * n_i"].sum()
 sum_ny = df["n_i * y_xi"].sum()
 sum_xny = df["x_i * n_i * y_xi"].sum()
 
-print("\nОбчислимо потрібні суми:")
+print("\nОбраховую потрібні суми:")
 print(f"Σ n_i = {sum_n}")
 
 print(
@@ -120,7 +120,7 @@ Q_total = df["Q_total"].sum()
 Q_p = df["Q_p"].sum()
 Q_o = df["Q_o"].sum()
 
-print("\nПідсумовуємо:")
+print("\nПідсумовую:")
 print(f"Q_total = {Q_total:.4f}")
 print(f"Q_p = {Q_p:.4f}")
 print(f"Q_o = {Q_o:.4f}")

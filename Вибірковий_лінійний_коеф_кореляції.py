@@ -66,7 +66,7 @@ print(f"r = {numerator:.4f} / sqrt({sum_x:.4f} * {sum_y:.4f})")
 print(f"r = {numerator:.4f} / {denominator:.4f}")
 print(f"r = {r:.4f}")
 
-print("\nІнтерпретація:")
+print("\nВисновок:")
 
 if r > 0:
     print("Оскільки r > 0, зв’язок між X та Y є додатний.")

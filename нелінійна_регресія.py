@@ -340,3 +340,37 @@ y_star = a_par * x_star ** 2 + b_par * x_star + c_par
 print(f"x* = {x_star}")
 print(f"y* = {a_par:.4f} · {x_star}² + {b_par:.4f} · {x_star} + {c_par:.4f}")
 print(f"y* = {y_star:.4f}")
+
+print("\n" + "=" * 70)
+print("ДОДАТКОВЕ ПРОГНОЗУВАННЯ ЗА ОПТИМАЛЬНОЮ ПАРАБОЛІЧНОЮ МОДЕЛЛЮ")
+print("=" * 70)
+
+a_forecast = 0.6139
+b_forecast = 3.5810
+c_forecast = 1.2062
+
+print("\nОптимальна модель:")
+print(f"y* = {a_forecast:.4f}x² + {b_forecast:.4f}x + {c_forecast:.4f}")
+
+forecast_x_values = [14, 15]
+forecast_points = []
+
+for x_star in forecast_x_values:
+    x_squared = x_star ** 2
+    first_part = a_forecast * x_squared
+    second_part = b_forecast * x_star
+    y_star = first_part + second_part + c_forecast
+    forecast_points.append((x_star, y_star))
+
+    print(f"\nДля x = {x_star}:")
+    print(f"y*({x_star}) = {a_forecast:.4f} · {x_star}² + {b_forecast:.4f} · {x_star} + {c_forecast:.4f}")
+    print(f"y*({x_star}) = {a_forecast:.4f} · {x_squared} + {second_part:.4f} + {c_forecast:.4f}")
+    print(f"y*({x_star}) = {first_part:.4f} + {second_part:.4f} + {c_forecast:.4f}")
+    print(f"y*({x_star}) = {y_star:.4f}")
+    print(f"Отже, при x = {x_star} прогнозоване значення становить y* ≈ {y_star:.4f}.")
+
+print("\nПрогнозні точки:")
+for index, (x_star, y_star) in enumerate(forecast_points, start=1):
+    print(f"P{index}({x_star}; {y_star:.4f})")
+
+print("\nЦі точки потрібно додати на графік оптимальної параболічної моделі, щоб графічно показати прогноз.")

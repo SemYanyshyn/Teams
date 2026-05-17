@@ -31,7 +31,14 @@ c_parabola = 1.2062115107383296
 a_root = 14.411356623524473
 b_root = -1.9531105224252305
 
-x_smooth = np.linspace(min(x_values), max(x_values), 300)
+a_forecast = 0.6139
+b_forecast = 3.5810
+c_forecast = 1.2062
+
+x_forecast = np.array([14, 15], dtype=float)
+y_forecast = a_forecast * x_forecast ** 2 + b_forecast * x_forecast + c_forecast
+
+x_smooth = np.linspace(min(x_values), max(x_forecast), 500)
 
 y_linear = a_linear * x_smooth + b_linear
 y_parabola = a_parabola * x_smooth ** 2 + b_parabola * x_smooth + c_parabola
@@ -44,6 +51,7 @@ color_empirical = "#4ECDC4"
 color_linear = "#45B7D1"
 color_parabola = "#F7B731"
 color_root = "#9B59B6"
+color_forecast = "#2ECC71"
 
 ax.scatter(
     x_values,
@@ -101,6 +109,18 @@ ax.plot(
     zorder=2
 )
 
+ax.scatter(
+    x_forecast,
+    y_forecast,
+    s=300,
+    label="Прогнозні точки за параболічною моделлю",
+    color=color_forecast,
+    edgecolors="darkgreen",
+    linewidth=2.5,
+    marker="*",
+    zorder=6
+)
+
 for x, y in zip(x_values, y_x_mean):
     ax.text(
         x,
@@ -117,11 +137,28 @@ for x, y in zip(x_values, y_x_mean):
         )
     )
 
+for index, (x, y) in enumerate(zip(x_forecast, y_forecast), start=1):
+    ax.text(
+        x,
+        y + 4,
+        f"P{index}({x:.0f}; {y:.4f})",
+        ha="center",
+        fontsize=10,
+        fontweight="bold",
+        color="darkgreen",
+        bbox=dict(
+            boxstyle="round,pad=0.35",
+            facecolor="white",
+            alpha=0.85,
+            edgecolor="darkgreen"
+        )
+    )
+
 ax.set_xlabel("X", fontsize=14, fontweight="bold", labelpad=10)
 ax.set_ylabel("Y", fontsize=14, fontweight="bold", labelpad=10)
 
 ax.set_title(
-    "Поле кореляції, емпірична лінія та регресійні моделі",
+    "Поле кореляції, емпірична лінія, регресійні моделі та прогноз",
     fontsize=16,
     fontweight="bold",
     pad=20,
@@ -153,14 +190,18 @@ ax.tick_params(axis="both", which="minor", labelsize=10, width=1, length=3)
 ax.set_facecolor("#ffffff")
 fig.patch.set_facecolor("#f8f9fa")
 
-ax.set_xlim(min(x_values) - 0.5, max(x_values) + 0.5)
-ax.set_ylim(min(y_x_mean) - 3, max(y_x_mean) + 5)
+ax.set_xlim(min(x_values) - 0.5, max(x_forecast) + 0.8)
+ax.set_ylim(min(y_x_mean) - 3, max(y_forecast) + 20)
 
 plt.tight_layout()
 
-out_path = "plot_regression_new.png"
+out_path = "plot_regression_with_forecast.png"
 plt.savefig(out_path, dpi=150, bbox_inches="tight")
 
 print(f"✓ Графік збережено в: {out_path}")
+
+print("\nПрогнозні точки:")
+for index, (x, y) in enumerate(zip(x_forecast, y_forecast), start=1):
+    print(f"P{index}({x:.0f}; {y:.4f})")
 
 plt.show()
